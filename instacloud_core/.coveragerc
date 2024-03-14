@@ -1,0 +1,6 @@
+[run]
+source = instacloud_core
+omit = 
+    tests/*
+    autoapp.py
+

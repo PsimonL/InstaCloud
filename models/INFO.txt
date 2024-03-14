@@ -1,0 +1,1 @@
+Tu Mateusz niech wrzuci modele, najlepiej jako modele pickled (library pickle do pakownaia modeli ML). Z jakimś wejściem i wyjściem.

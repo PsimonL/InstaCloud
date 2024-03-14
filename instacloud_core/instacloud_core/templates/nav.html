@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{{ url_for('public.home') }}">
+      <img src="{{static_url_for('static', filename='img/favicon.ico') }}" width="30" height="30"
+        class="d-inline-block align-top" alt=""> InstaCloud
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{{ url_for('public.home') }}">Home
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Show
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li><a class="dropdown-item" href="{{ url_for('public.browse', animal='cats') }}">Cats</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('public.browse', animal='dogs') }}">Dogs</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('public.upload') }}">Upload</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('public.about') }}">About</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

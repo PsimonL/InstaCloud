@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block page_title %} Upload picture {% endblock %}
+{% block main %}
+<form action="/upload" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="text-center mt-4">
+        <h1>Please choose a picture of a dog or a cat that you want to upload</h1>
+    </div>
+    <div class="file-upload">
+        <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Add
+            Image</button>
+
+        <div class="image-upload-wrap">
+            <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
+            <div class="drag-text">
+                <h3>Drag and drop a file or select the Image that you want to add</h3>
+            </div>
+        </div>
+        <div class="file-upload-content">
+            <img class="file-upload-image" src="#" alt="your image" />
+            <div class="image-title-wrap">
+                <button type="button" onclick="removeUpload()" class="remove-image">Remove <span
+                        class="image-title">Uploaded Image</span></button>
+                <input type="submit" value="Upload" class="upload-image" />
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
