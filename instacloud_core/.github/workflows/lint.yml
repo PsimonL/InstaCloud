@@ -1,23 +1,23 @@
-name: Build Status
-
-on:
-  - push
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ""
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements/dev.txt
-      - run: cp .env.example .env
-      - name: Run Python lints
-        run: flask lint --check
-      - name: Run Python tests
-        run: flask test
+#name: Build Status
+#
+#on:
+#  - push
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Set up Python
+#        uses: actions/setup-python@v4
+#        with:
+#          python-version: ""
+#      - name: Install Python dependencies
+#        run: |
+#          python -m pip install --upgrade pip
+#          pip install -r requirements/dev.txt
+#      - run: cp .env.example .env
+#      - name: Run Python lints
+#        run: flask lint --check
+#      - name: Run Python tests
+#        run: flask test

@@ -11,17 +11,17 @@ jobs:
 
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: '3.x'
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r .github/workflows/requirements.txt
+        pip install -r instacloud_core/requirements/prod.txt
 
     - name: Build Docker image
       run: docker build -t your_image_name .
