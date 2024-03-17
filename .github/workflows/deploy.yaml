@@ -23,8 +23,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r instacloud_core/requirements/prod.txt
 
-    - name: Build Docker image
-      run: docker build --target production -t InstaCloud:production -f Dockerfile .
+    - name: Build Docker image Builder for next stage
+      run: docker build --target builder -t insta_cloud:builder -f Dockerfile .
+
+    - name: Build Docker image as final Artifact
+      run: docker build --target production -t insta_cloud:production -f Dockerfile .
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
@@ -32,5 +35,5 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Push Docker image to Docker Hub
-      run: docker push InstaCloud:production
+    - name: Push Artifact to Docker Hub
+      run: docker push insta_cloud:production
