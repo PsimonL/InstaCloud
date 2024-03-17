@@ -30,6 +30,12 @@ COPY . .
 
 EXPOSE 5000
 
+# TESTING =======================================================================================================
+RUN test -f /app/instacloud_core/app.py || (echo "Error: Flask application file not found." && exit 1)
+RUN test -d /app/instacloud_core/migrations || (echo "Error: Database migration directory not found." && exit 1)
+RUN test -f /app/instacloud_core/.env || (echo "Error: Database configuration file (.env) not found." && exit 1)
+# ===============================================================================================================
+
 RUN flask db upgrade
 
 ENTRYPOINT ["gunicorn"]  
