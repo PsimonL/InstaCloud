@@ -24,10 +24,10 @@ jobs:
         pip install -r instacloud_core/requirements/prod.txt
 
     - name: Build Docker image Builder for next stage
-      run: docker build --target builder -t insta_cloud:builder -f Dockerfile .
+      run: docker build --target builder -t insta_cloud:builder -f instacloud_core/Dockerfile instacloud_core/
 
     - name: Build Docker image as final Artifact
-      run: docker build --target production -t insta_cloud:production -f Dockerfile .
+      run: docker build --target production -t insta_cloud:production -f instacloud_core/Dockerfile instacloud_core/
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
