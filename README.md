@@ -1,4 +1,6 @@
-# Programowanie zespołowe - Insta Cloud
+# AGH; FIS; IS; PZ - Insta Cloud
+
+## Dokumentacja
 
 ## Wykonawcy:
 - [Michał Rutkowski](https://github.com/P4ndaM1x)

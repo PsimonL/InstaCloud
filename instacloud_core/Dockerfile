@@ -28,19 +28,19 @@ RUN pip install --no-cache --user -r requirements/prod.txt
 
 COPY . .
 
-EXPOSE 5000 
+EXPOSE 8080
 
 RUN flask db upgrade
 
 ENTRYPOINT ["gunicorn"]  
-CMD ["instacloud_core.app:create_app()", "-b", "0.0.0.0:5000", "-w", "1"]
+CMD ["instacloud_core.app:create_app()", "-b", "0.0.0.0:8080", "-w", "1"]
 
 
 # ================================= DEVELOPMENT ================================
 FROM builder AS development
 RUN pip install --no-cache -r requirements/dev.txt
 EXPOSE 2992
-EXPOSE 5000 
+EXPOSE 8080
 
 ENV FLASK_APP autoapp.py
 
