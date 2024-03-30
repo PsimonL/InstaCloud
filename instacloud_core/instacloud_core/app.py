@@ -14,10 +14,10 @@ from instacloud_core.extensions import (
     debug_toolbar,
     flask_static_digest,
     migrate,
+    login_manager
 )
 
 from .models import TestEntity
-
 
 def create_app(config_object="instacloud_core.settings"):
     """Create application factory, as explained here: http://flask.pocoo.org/docs/patterns/appfactories/.
@@ -26,7 +26,10 @@ def create_app(config_object="instacloud_core.settings"):
     """
     app = Flask(__name__.split(".")[0])
     app.config.from_object(config_object)
+    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.db"
+    app.config['SECRET_KEY'] = 'mysecretkey'
     register_extensions(app)
+    init_db(app)
     register_blueprints(app)
     register_errorhandlers(app)
     register_shellcontext(app)
@@ -44,8 +47,12 @@ def register_extensions(app):
     debug_toolbar.init_app(app)
     migrate.init_app(app, db)
     flask_static_digest.init_app(app)
+    login_manager.init_app(app)
     return None
 
+def init_db(app):
+    with app.app_context():
+        db.create_all()
 
 def register_shellcontext(app):
     """Register shell context objects."""

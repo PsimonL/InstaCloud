@@ -7,6 +7,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_static_digest import FlaskStaticDigest
 from flask_wtf.csrf import CSRFProtect
+from flask_login import LoginManager
 
 bcrypt = Bcrypt()
 csrf_protect = CSRFProtect()
@@ -15,3 +16,4 @@ migrate = Migrate()
 cache = Cache()
 debug_toolbar = DebugToolbarExtension()
 flask_static_digest = FlaskStaticDigest()
+login_manager = LoginManager()
