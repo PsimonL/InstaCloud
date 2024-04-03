@@ -8,14 +8,16 @@ from flask import (
     url_for,
     redirect
 )
-
+from models.model import predict_class
+import os
+import tempfile
 from instacloud_core.extensions import db, bcrypt, login_manager
 from .s3client import S3_Client
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user
 from flask_wtf.form import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
-
+from werkzeug.utils import secure_filename
 login_manager.login_view = "public.login"
 
 @login_manager.user_loader
@@ -96,6 +98,7 @@ def register():
     
     return render_template("/authorization/register.html", form=form)
 
+
 @blueprint.route("/upload", methods=["POST", "GET"])
 @login_required
 def upload():
@@ -107,18 +110,29 @@ def upload():
     else:
         if 'file' not in request.files:
             return render_template("public/upload.html", error="No file part")
-        try:
-            file = request.files['file']
-            if file.filename == '':
-                return render_template("public/upload.html", error="No selected file")
-            
-            current_app.logger.error(f"Sending file: {file}")
+        file = request.files['file']
+        if file.filename == '':
+            return render_template("public/upload.html", error="No selected file")
 
-            s3_client.upload_file(file, filename_in_s3=file.filename)
-            return render_template("public/home.html")
-        except Exception as ex:
-            current_app.logger.error(f"Exception: {ex}")
-            return render_template("public/upload.html", error="Something went wrong")
+        # Save temporary file
+        with tempfile.NamedTemporaryFile(delete=False) as tmp:
+            file.save(tmp.name)
+            try:
+                # Predict class
+                predicted_class = predict_class(tmp.name)
+                if predicted_class.lower() in ['cat', 'dog']:
+                    # If class is cat or dog, upload the file to S3
+                    file.seek(0)
+                    s3_client.upload_file(file, filename_in_s3=secure_filename(file.filename))
+                    return render_template("public/home.html")
+                else:
+                    # If class is not cat or dog, do not upload and return an error
+                    return render_template("public/upload.html", error="Uploaded file is not a cat or dog")
+            except Exception as ex:
+                current_app.logger.error(f"Exception: {ex}")
+                return render_template("public/upload.html", error="Something went wrong")
+            finally:
+                os.unlink(tmp.name)  # Delete the temporary file
 
 
 @blueprint.route("/browse/<animal>", methods=["GET"])
