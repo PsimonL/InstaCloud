@@ -32,15 +32,14 @@ COPY . .
 EXPOSE 5000
 
 
-
 # TESTING =======================================================================================================
 RUN test -f /app/instacloud_core/app.py || (echo "Error: Flask application file not found." && exit 1)
-RUN ls -la
-RUN pwd
-RUN ls -la /app/instacloud_core
 RUN test -d /app/migrations || (echo "Error: Database migration directory not found." && exit 1)
 RUN test -f /app/.env.example || (echo "Error: Database configuration file (.env) not found." && exit 1)
 # ===============================================================================================================
+
+RUN ls -la
+RUN pwd
 
 RUN flask db upgrade
 
