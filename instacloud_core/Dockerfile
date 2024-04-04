@@ -41,6 +41,7 @@ RUN test -f /app/.env.example || (echo "Error: Database configuration file (.env
 RUN ls -la
 RUN pwd
 
+ENV FLASK_APP=instacloud_core.app
 RUN flask db upgrade
 
 ENTRYPOINT ["gunicorn"]  
