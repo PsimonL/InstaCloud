@@ -3,6 +3,7 @@ import cv2
 from ultralytics import YOLO
 
 
+
 def predict_class(path_to_photo):
     """
     Predict the class
