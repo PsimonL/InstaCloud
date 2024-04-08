@@ -47,7 +47,6 @@ ENV FLASK_APP=instacloud_core.app
 # Visible only during build process
 ARG DATABASE_URL
 ARG SECRET_KEY
-ARG SEND_FILE_MAX_AGE_DEFAULT
 
 # RUN echo "DATABASE_URL: $DATABASE_URL"
 # RUN printenv
