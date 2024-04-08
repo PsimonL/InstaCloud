@@ -42,6 +42,8 @@ RUN ls -la
 RUN pwd
 
 ENV FLASK_APP=instacloud_core.app
+
+ARG DATABASE_URL
 RUN echo "DATABASE_URL: $DATABASE_URL"
 RUN printenv
 RUN flask db upgrade

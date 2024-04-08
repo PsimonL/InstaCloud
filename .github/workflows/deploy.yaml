@@ -18,7 +18,7 @@ jobs:
       with:
         python-version: '3.x'
 
-    - name: Build Docker image Builder for next stage
+    - name: Build Docker base image "Builder" for next stage
       run: docker build --build-arg INSTALL_PYTHON_VERSION=3.11 --target builder -t insta_cloud:builder -f instacloud_core/Dockerfile instacloud_core/
 
     - name: Build Docker image as final Artifact
