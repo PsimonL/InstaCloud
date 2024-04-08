@@ -38,15 +38,20 @@ RUN test -d /app/migrations || (echo "Error: Database migration directory not fo
 RUN test -f /app/.env.example || (echo "Error: Database configuration file (.env) not found." && exit 1)
 # ===============================================================================================================
 
-RUN ls -la
-RUN pwd
+# RUN ls -la
+# RUN pwd
 
+# Visible after build proces in a container
 ENV FLASK_APP=instacloud_core.app
-
+# ENV DATABASE_URL=$DATABASE_URL
+# Visible only during build process
 ARG DATABASE_URL
-RUN echo "DATABASE_URL: $DATABASE_URL"
-RUN printenv
-RUN flask db upgrade
+ARG SECRET_KEY
+ARG SEND_FILE_MAX_AGE_DEFAULT
+
+# RUN echo "DATABASE_URL: $DATABASE_URL"
+# RUN printenv
+# RUN flask db upgrade
 
 ENTRYPOINT ["gunicorn"]  
 CMD ["instacloud_core.app:create_app()", "-b", "0.0.0.0:5000", "-w", "1"]
