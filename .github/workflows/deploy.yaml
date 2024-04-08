@@ -34,4 +34,4 @@ jobs:
       run: docker images
 
     - name: Push Artifact to Docker Hub
-      run: docker push sr1agh1bin/insta_cloud:production
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/insta_cloud:production
