@@ -31,4 +31,4 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Push Artifact to Docker Hub
-      run: docker push sr1agh1bin/instacloud_agh_wfis_2024:production
+      run: docker push sr1agh1bin/insta_cloud:production
