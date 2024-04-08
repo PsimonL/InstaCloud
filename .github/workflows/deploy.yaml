@@ -32,6 +32,9 @@ jobs:
         
     - name: Verify Docker Image
       run: docker images
-
+  
+    - name: Tag Artifact Docker Image
+      run: docker tag insta_cloud:production ${{ secrets.DOCKER_USERNAME }}/insta_cloud:production
+  
     - name: Push Artifact to Docker Hub
       run: docker push ${{ secrets.DOCKER_USERNAME }}/insta_cloud:production
