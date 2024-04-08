@@ -30,9 +30,6 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         
-    - name: Verify Docker Image
-      run: docker images
-  
     - name: Tag Artifact Docker Image
       run: docker tag insta_cloud:production ${{ secrets.DOCKER_USERNAME }}/insta_cloud:production
   
