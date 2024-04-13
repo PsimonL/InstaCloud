@@ -4,8 +4,8 @@ from models.model import predict_class
 
 
 class TestPredictClass(unittest.TestCase):
-    @patch('models.model.cv2.imread')
-    @patch('models.model.YOLO')
+    @patch('ml_models.model.cv2.imread')
+    @patch('ml_models.model.YOLO')
     def test_predict_dog(self, mock_yolo, mock_imread):
         # Set up mock return values
         mock_imread.return_value = 'image_data'
@@ -19,8 +19,8 @@ class TestPredictClass(unittest.TestCase):
         # Assert the expected outcome
         self.assertEqual(result, 'dog')
 
-    @patch('models.model.cv2.imread')
-    @patch('models.model.YOLO')
+    @patch('ml_models.model.cv2.imread')
+    @patch('ml_models.model.YOLO')
     def test_predict_cat(self, mock_yolo, mock_imread):
         # Setup mock return value
         mock_imread.return_value = 'image_data'
@@ -34,8 +34,8 @@ class TestPredictClass(unittest.TestCase):
         # Assert the expected outcome
         self.assertEqual(result, 'cat')
 
-    @patch('models.model.cv2.imread')
-    @patch('models.model.YOLO')
+    @patch('ml_models.model.cv2.imread')
+    @patch('ml_models.model.YOLO')
     def test_predict_random(self, mock_yolo, mock_imread):
         # Setup mock return value
         mock_imread.return_value = 'image_data'
