@@ -45,8 +45,10 @@ RUN test -f /app/.env.example || (echo "Error: Database configuration file (.env
 ENV FLASK_APP=instacloud_core.app
 # ENV DATABASE_URL=$DATABASE_URL
 # Visible only during build process
-ARG DATABASE_URL
-ARG SECRET_KEY
+# ARG DATABASE_URL
+# ARG SECRET_KEY
+ENV DATABASE_URL=${DATABASE_URL}
+ENV SECRET_KEY=${SECRET_KEY}
 
 # RUN echo "DATABASE_URL: $DATABASE_URL"
 # RUN printenv
