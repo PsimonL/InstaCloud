@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from models.model import predict_class
+from ml_models.model import predict_class
 
 
 class TestPredictClass(unittest.TestCase):
