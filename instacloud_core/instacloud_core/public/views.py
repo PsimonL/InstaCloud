@@ -114,7 +114,7 @@ def upload():
             if file.filename == '':
                 return render_template("public/upload.html", error="No selected file")
             
-            current_app.logger.error(f"Sending file: {file}")
+            # current_app.logger.error(f"Sending file: {file}")
 
             s3_client.upload_file(file, filename_in_s3=file.filename)
             return render_template("public/home.html")

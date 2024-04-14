@@ -32,7 +32,7 @@ docker-compose run --rm manage <<COMMAND>>
 ```bash
 sudo apt install python3.11
 sudo apt install python3.11-venv
-python3.11 -m venv env
+python3.11 -m venv env --without-pip
 source ./env/bin/activate
 pip install -r requirements/dev.txt
 ```

@@ -9,6 +9,28 @@ x-default-volumes: &default_volumes
     - ./dev.db:/tmp/dev.db
 
 services:
+  s3service:
+    image: quay.io/minio/minio:latest
+    command: server --console-address ":9001" /data
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    env_file: minio.env
+
+  initialize-s3service:
+    image: quay.io/minio/mc
+    entrypoint: >
+      /bin/sh -c '
+      /usr/bin/mc alias set s3service http://s3service:9000 "$${MINIO_ROOT_USER}" "$${MINIO_ROOT_PASSWORD}";
+      /usr/bin/mc mb s3service/"$${BUCKET_NAME}";
+      /usr/bin/mc admin user add s3service "$${ACCESS_KEY}" "$${SECRET_KEY}";
+      /usr/bin/mc admin policy attach s3service readwrite --user "$${ACCESS_KEY}";
+      exit 0;
+      '
+    depends_on:
+      - s3service
+    env_file: minio.env
+
   flask-dev:
     build:
       context: .
@@ -20,7 +42,10 @@ services:
       - "8080:5000"
       - "2992:2992"
     <<: *default_volumes
-
+    depends_on:
+      - s3service 
+      - initialize-s3service
+ 
   flask-prod:
     build:
       context: .
