@@ -42,6 +42,6 @@ Flask-DebugToolbar==0.14.1
 environs==11.0.0
 
 # Everything for prediction
-# --extra-index-url https://download.pytorch.org/whl/cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
 opencv-python==4.9.0.80
 ultralytics==8.1.24

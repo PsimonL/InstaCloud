@@ -8,6 +8,7 @@ WORKDIR /app
 RUN true
 COPY requirements requirements
 RUN pip install --no-cache -r requirements/prod.txt
+RUN apt-get update && apt-get install -y python3-opencv
 
 COPY instacloud_core instacloud_core
 COPY migrations migrations
