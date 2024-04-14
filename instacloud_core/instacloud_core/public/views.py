@@ -8,7 +8,7 @@ from flask import (
     url_for,
     redirect
 )
-from ml_models.model import predict_class
+from instacloud_core.ml_models.model import predict_class
 import os
 import tempfile
 from instacloud_core.extensions import db, bcrypt, login_manager
