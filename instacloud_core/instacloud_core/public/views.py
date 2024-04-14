@@ -144,7 +144,7 @@ def browse(animal):
 
     all_files = s3_client.list_files(animal)
 
-    image_urls = [f"https://{f"{AWS_BUCKET_NAME}"}s3.amazonaws.com/{file}" for file in all_files]
+    image_urls = [f"https://{AWS_BUCKET_NAME}s3.amazonaws.com/{file}" for file in all_files]
     current_app.logger.info(image_urls)
 
     return render_template("public/browse.html", pet=animal, image_urls=image_urls)
