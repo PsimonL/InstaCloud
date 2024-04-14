@@ -60,6 +60,7 @@ class LoginForm(FlaskForm):
 
 blueprint = Blueprint("public", __name__, static_folder="../static")
 s3_client = S3_Client()
+AWS_BUCKET_NAME = os.getenv('AWS_BUCKET_NAME')
 
 @blueprint.route("/", methods=["GET"])
 @login_required
@@ -110,6 +111,7 @@ def upload():
     else:
         if 'file' not in request.files:
             return render_template("public/upload.html", error="No file part")
+
         file = request.files['file']
         if file.filename == '':
             return render_template("public/upload.html", error="No selected file")
@@ -136,12 +138,16 @@ def upload():
 
 
 @blueprint.route("/browse/<animal>", methods=["GET"])
-@login_required
 def browse(animal):
     """Browse page."""
     current_app.logger.info("Hello from the browse page!")
 
-    return render_template("public/browse.html", pet=animal)
+    all_files = s3_client.list_files(animal)
+
+    image_urls = [f"https://{f"{AWS_BUCKET_NAME}"}s3.amazonaws.com/{file}" for file in all_files]
+    current_app.logger.info(image_urls)
+
+    return render_template("public/browse.html", pet=animal, image_urls=image_urls)
 
 @blueprint.route("/about", methods=["GET"])
 def about():

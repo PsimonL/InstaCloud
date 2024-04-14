@@ -5,6 +5,7 @@ AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY')
 AWS_SECRET_KEY = os.getenv('AWS_SECRET_KEY')
 AWS_BUCKET_NAME = os.getenv('AWS_BUCKET_NAME')
 AWS_REGION = os.getenv('AWS_REGION')
+AWS_ENDPOINT = os.getenv('AWS_ENDPOINT')
 
 class S3_Client:
    
@@ -13,7 +14,8 @@ class S3_Client:
             service_name='s3',
             region_name=AWS_REGION,
             aws_access_key_id=AWS_ACCESS_KEY,
-            aws_secret_access_key=AWS_SECRET_KEY
+            aws_secret_access_key=AWS_SECRET_KEY,
+            endpoint_url=AWS_ENDPOINT
         )
     
     def upload_file(self, file, filename_in_s3):
@@ -28,4 +30,13 @@ class S3_Client:
             file_names = [obj['Key'] for obj in response['Contents']]
         
         return file_names
-
+    
+    def list_files(self, folder):
+        file_info_list = []
+        response = self.client.list_objects_v2(Bucket=AWS_BUCKET_NAME, Prefix=folder)
+        if 'Contents' in response:
+            for obj in response['Contents']:
+                file_name = obj['Key']
+                if not file_name.endswith('/'):
+                    file_info_list.append(file_name)
+        return file_info_list
