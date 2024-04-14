@@ -10,8 +10,7 @@ def predict_class(path_to_photo):
     :param path_to_photo: path to the image to predict
     :return: the class of the image
     """
-    # os.chdir('../../../ml_models')
-    model = YOLO(r'../../../ml_models/InstaCloud.pt')
+    model = YOLO(r'../ml_models/InstaCloud.pt')
     source = cv2.imread(path_to_photo)
     results = model.predict(source, verbose=False)
     return results[0].names[results[0].boxes.cls[0].item()]
