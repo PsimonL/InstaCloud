@@ -4,10 +4,10 @@
 <div class="text-center mt-4">
     <h1>Currently browsing wall of {{ pet }}</h1>
 
-    <img src="{{static_url_for('static', filename='img/dog2.jpg') }}" class="img-fluid hover-shadow" alt="Temp Pet" />
-
-    <!-- TO DO - po podlaczeniu do bucketa -->
-    <!-- {% for pet in pets_collection %}
-    {% endfor %} -->
+    {% for image_url in image_urls %}
+    <div>
+        <img src="{{ image_url }}" class="img-fluid hover-shadow" alt="{{ pet }}" />
+        </div>
+    {% endfor %}
 </div>
 {% endblock %}
