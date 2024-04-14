@@ -28,4 +28,13 @@ class S3_Client:
             file_names = [obj['Key'] for obj in response['Contents']]
         
         return file_names
-
+    
+    def list_files(self, folder):
+        file_info_list = []
+        response = self.client.list_objects_v2(Bucket=AWS_BUCKET_NAME, Prefix=folder)
+        if 'Contents' in response:
+            for obj in response['Contents']:
+                file_name = obj['Key']
+                if not file_name.endswith('/'):
+                    file_info_list.append(file_name)
+        return file_info_list
