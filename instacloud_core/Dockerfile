@@ -6,8 +6,6 @@ FROM python:${INSTALL_PYTHON_VERSION} AS builder
 WORKDIR /app
 
 RUN true
-RUN apt-get update && apt-get install -y libgl1-mesa-glx && rm -rf /var/lib/apt/lists/*
-
 COPY requirements requirements
 RUN pip install --no-cache -r requirements/prod.txt
 RUN apt-get update && apt-get install -y python3-opencv
@@ -20,11 +18,12 @@ COPY .env.example .env
 FROM python:${INSTALL_PYTHON_VERSION} as production
 
 WORKDIR /app
-RUN apt-get update && apt-get install -y libgl1-mesa-glx && rm -rf /var/lib/apt/lists/*
+
 RUN useradd -m sid
 RUN chown -R sid:sid /app
 USER sid
 ENV PATH="/home/sid/.local/bin:${PATH}"
+
 COPY --from=builder --chown=sid:sid /app/instacloud_core/static /app/instacloud_core/static
 COPY requirements requirements
 RUN pip install --no-cache --user -r requirements/prod.txt
