@@ -25,7 +25,14 @@ jobs:
       run: docker build --build-arg INSTALL_PYTHON_VERSION=3.11 --build-arg DATABASE_URL='${{ secrets.DATABASE_URL }}' --build-arg SECRET_KEY='${{ secrets.SECRET_KEY }}' --target production -t insta_cloud:production -f instacloud_core/Dockerfile instacloud_core/
 
     - name: Start final container
-      run: docker run --name insta_cloud_app -p 8080:5000 insta_cloud:production
+      run: |
+        docker run --name insta_cloud_app -p 8080:5000 -d \
+          --health-cmd="curl -f http://localhost:5000/ || exit 1" \
+          --health-interval=30s \
+          --health-timeout=30s \
+          --health-retries=3 \
+          --health-start-period=5s \
+          insta_cloud:production
 
     - name: Login to Docker Hub
       uses: docker/login-action@v1
@@ -38,3 +45,22 @@ jobs:
   
     - name: Push Artifact to Docker Hub
       run: docker push ${{ secrets.DOCKER_USERNAME }}/insta_cloud:production
+
+
+
+#- name: Start final container
+#  run: |
+#    docker run --name insta_cloud_app -p 8080:5000 -d insta_cloud:production
+#    sleep 10s  # Wait for 10 seconds to allow the container to start
+#
+#- name: Check container logs
+#  run: |
+#    docker logs insta_cloud_app
+#
+#- name: Verify container health
+#  run: |
+#    if ! docker ps | grep -q insta_cloud_app; then
+#      echo "Container failed to start, checking logs..."
+#      docker logs insta_cloud_app
+#      exit 1
+#    fi
