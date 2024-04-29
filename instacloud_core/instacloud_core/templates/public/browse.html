@@ -1,13 +1,16 @@
 {% extends "layout.html" %}
-{% block page_title %} Browse {{ pet }} {% endblock %}
+{% block page_title %} Browse {{ image_links, pet }} {% endblock %}
 {% block main %}
 <div class="text-center mt-4">
     <h1>Currently browsing wall of {{ pet }}</h1>
-
-    <img src="{{static_url_for('static', filename='img/dog2.jpg') }}" class="img-fluid hover-shadow" alt="Temp Pet" />
-
-    <!-- TO DO - po podlaczeniu do bucketa -->
-    <!-- {% for pet in pets_collection %}
-    {% endfor %} -->
+    {% if image_links %}
+        {% for image_link in image_links %}
+            <div>
+                <img src="{{ image_link }}" style="width: 500px; height: 500px; object-fit: cover;">
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Not found</p>
+    {% endif %}
 </div>
 {% endblock %}

@@ -114,7 +114,7 @@ def upload():
             
             current_app.logger.error(f"Sending file: {file}")
 
-            s3_client.upload_file(file, filename_in_s3=file.filename)
+            s3_client.upload_file(file, filename_in_s3=file.filename, category='cats')
             return render_template("public/home.html")
         except Exception as ex:
             current_app.logger.error(f"Exception: {ex}")
@@ -126,8 +126,8 @@ def upload():
 def browse(animal):
     """Browse page."""
     current_app.logger.info("Hello from the browse page!")
-
-    return render_template("public/browse.html", pet=animal)
+    list = s3_client.get_images_by_category(animal)
+    return render_template("public/browse.html", image_links=list, pet=animal)
 
 @blueprint.route("/about", methods=["GET"])
 def about():
