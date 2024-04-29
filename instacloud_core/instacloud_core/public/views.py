@@ -125,7 +125,7 @@ def upload():
                 if predicted_class.lower() in ['cat', 'dog']:
                     # If class is cat or dog, upload the file to S3
                     file.seek(0)
-                    s3_client.upload_file(file, filename_in_s3=secure_filename(file.filename))
+                    s3_client.upload_file(file, filename_in_s3=secure_filename(file.filename), image_class=predicted_class.lower())
                     return render_template("public/home.html")
                 else:
                     # If class is not cat or dog, do not upload and return an error
@@ -138,16 +138,12 @@ def upload():
 
 
 @blueprint.route("/browse/<animal>", methods=["GET"])
+@login_required
 def browse(animal):
     """Browse page."""
     current_app.logger.info("Hello from the browse page!")
-
-    all_files = s3_client.list_files(animal)
-
-    image_urls = [f"https://{AWS_BUCKET_NAME}s3.amazonaws.com/{file}" for file in all_files]
-    current_app.logger.info(image_urls)
-
-    return render_template("public/browse.html", pet=animal, image_urls=image_urls)
+    list = s3_client.get_images_by_category(animal)
+    return render_template("public/browse.html", image_links=list, pet=animal)
 
 @blueprint.route("/about", methods=["GET"])
 def about():

@@ -1,13 +1,16 @@
 {% extends "layout.html" %}
-{% block page_title %} Browse {{ pet }} {% endblock %}
+{% block page_title %} Browse {{ image_links, pet }} {% endblock %}
 {% block main %}
 <div class="text-center mt-4">
     <h1>Currently browsing wall of {{ pet }}</h1>
-
-    {% for image_url in image_urls %}
-    <div>
-        <img src="{{ image_url }}" class="img-fluid hover-shadow" alt="{{ pet }}" />
-        </div>
-    {% endfor %}
+    {% if image_links %}
+        {% for image_link in image_links %}
+            <div>
+                <img src="{{ image_link }}" style="width: 500px; height: 500px; object-fit: cover;">
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Not found</p>
+    {% endif %}
 </div>
 {% endblock %}
