@@ -18,25 +18,19 @@ class S3_Client:
             endpoint_url=AWS_ENDPOINT
         )
     
-    def upload_file(self, file, filename_in_s3):
-        self.client.upload_fileobj(file, AWS_BUCKET_NAME, filename_in_s3)
+    def upload_file(self, file, filename_in_s3, image_class):
+        dir = 'dogs' if image_class == 'dog' else 'cats'
+        self.client.upload_fileobj(file, AWS_BUCKET_NAME, dir + '/' + filename_in_s3)
     
     def download_file(self, local_filename, filename_in_s3):
         self.client.download_file(Bucket=AWS_BUCKET_NAME, Key=filename_in_s3, Filename=local_filename)
-
-    def list_all_files(self):
-        response = self.client.list_objects_v2(Bucket=AWS_BUCKET_NAME)
-        if 'Contents' in response:
-            file_names = [obj['Key'] for obj in response['Contents']]
-        
-        return file_names
     
-    def list_files(self, folder):
-        file_info_list = []
-        response = self.client.list_objects_v2(Bucket=AWS_BUCKET_NAME, Prefix=folder)
-        if 'Contents' in response:
-            for obj in response['Contents']:
-                file_name = obj['Key']
-                if not file_name.endswith('/'):
-                    file_info_list.append(file_name)
-        return file_info_list
+    def get_images_by_category(self, category):
+        files = self.client.list_objects_v2(Bucket=AWS_BUCKET_NAME, Prefix=category + '/')
+        file_urls = []
+        if 'Contents' in files:
+            for file in files['Contents']:
+                params = {'Bucket': AWS_BUCKET_NAME, 'Key': file['Key']}
+                url = self.client.generate_presigned_url('get_object', Params=params, ExpiresIn=3600)
+                file_urls.append(url)
+        return file_urls
