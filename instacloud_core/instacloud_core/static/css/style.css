@@ -10,6 +10,9 @@ html {
 
 body {
   padding-top: 60px;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
 section {
@@ -32,7 +35,6 @@ textarea {
   width: 180px;
 }
 
-
 .form-register {
   width: 50%;
 }
@@ -50,10 +52,10 @@ textarea {
 /* footer */
 
 footer {
-  margin-top: 45px;
   padding-top: 5px;
   border-top: 1px solid #eaeaea;
   color: #999999;
+  margin-top: auto;
 }
 
 footer a {
@@ -87,7 +89,7 @@ footer .footer-nav {
 
 /* carousel */
 
-.carousel-inner>.carousel-item>img {
+.carousel-inner > .carousel-item > img {
   height: 74vh;
   margin: 0 auto;
 }
@@ -105,27 +107,27 @@ footer .footer-nav {
   width: 100%;
   margin: 0;
   color: #fff;
-  background: #1FB264;
+  background: #1fb264;
   border: none;
   padding: 10px;
   border-radius: 4px;
-  border-bottom: 4px solid #15824B;
-  transition: all .2s ease;
+  border-bottom: 4px solid #15824b;
+  transition: all 0.2s ease;
   outline: none;
   text-transform: uppercase;
   font-weight: 700;
 }
 
 .file-upload-btn:hover {
-  background: #1AA059;
+  background: #1aa059;
   color: #ffffff;
-  transition: all .2s ease;
+  transition: all 0.2s ease;
   cursor: pointer;
 }
 
 .file-upload-btn:active {
   border: 0;
-  transition: all .2s ease;
+  transition: all 0.2s ease;
 }
 
 .file-upload-content {
@@ -146,13 +148,13 @@ footer .footer-nav {
 
 .image-upload-wrap {
   margin-top: 20px;
-  border: 4px dashed #1FB264;
+  border: 4px dashed #1fb264;
   position: relative;
 }
 
 .image-dropping,
 .image-upload-wrap:hover {
-  background-color: #1FB264;
+  background-color: #1fb264;
   border: 4px dashed #ffffff;
 }
 
@@ -168,7 +170,7 @@ footer .footer-nav {
 .drag-text h3 {
   font-weight: 100;
   text-transform: uppercase;
-  color: #15824B;
+  color: #15824b;
   padding: 60px 0;
 }
 
@@ -188,7 +190,7 @@ footer .footer-nav {
   padding: 10px;
   border-radius: 4px;
   border-bottom: 4px solid #b02818;
-  transition: all .2s ease;
+  transition: all 0.2s ease;
   outline: none;
   text-transform: uppercase;
   font-weight: 700;
@@ -197,38 +199,38 @@ footer .footer-nav {
 .remove-image:hover {
   background: #c13b2a;
   color: #ffffff;
-  transition: all .2s ease;
+  transition: all 0.2s ease;
   cursor: pointer;
 }
 
 .remove-image:active {
   border: 0;
-  transition: all .2s ease;
+  transition: all 0.2s ease;
 }
 
 .upload-image {
   width: 200px;
   margin: 0;
   color: #fff;
-  background: #1FB264;
+  background: #1fb264;
   border: none;
   padding: 10px;
   border-radius: 4px;
-  border-bottom: 4px solid #15824B;
-  transition: all .2s ease;
+  border-bottom: 4px solid #15824b;
+  transition: all 0.2s ease;
   outline: none;
   text-transform: uppercase;
   font-weight: 700;
 }
 
 .upload-image:hover {
-  background: #1AA059;
+  background: #1aa059;
   color: #ffffff;
-  transition: all .2s ease;
+  transition: all 0.2s ease;
   cursor: pointer;
 }
 
 .upload-image:active {
   border: 0;
-  transition: all .2s ease;
+  transition: all 0.2s ease;
 }

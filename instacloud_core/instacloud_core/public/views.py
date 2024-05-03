@@ -9,26 +9,25 @@ from flask import (
     redirect
 )
 from instacloud_core.ml_models.model import predict_class
+from ..models.User import User
+from ..models.UserPicture import UserPicture
 import os
 import tempfile
 from instacloud_core.extensions import db, bcrypt, login_manager
 from .s3client import S3_Client
-from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf.form import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from werkzeug.utils import secure_filename
+from uuid_extensions import uuid7str
+
 
 login_manager.login_view = "public.login"
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), nullable=False, unique=True)
-    password = db.Column(db.String(20), nullable=False)
 
 class RegistrationForm(FlaskForm):
     username = StringField(
@@ -46,7 +45,7 @@ class RegistrationForm(FlaskForm):
             username=username.data).first()
         if existing_user_name:
             raise ValidationError("Username already exists!")
-        
+
 class LoginForm(FlaskForm):
     username = StringField(
                     validators=[InputRequired(), Length(min=4, max=20)], 
@@ -66,8 +65,13 @@ AWS_BUCKET_NAME = os.getenv('AWS_BUCKET_NAME')
 @login_required
 def home():
     """Home page."""
-    current_app.logger.info("Hello from the home page!")
-    return render_template("/public/home.html")
+    all_user_pics = UserPicture.query.all()
+    s3_urls = []
+    for user_pic in all_user_pics:
+        s3_urls.append(s3_client.get_s3_url(user_pic.picture_identifier))
+        
+    ctx = {"s3_urls": s3_urls}
+    return render_template("/public/home.html", ctx=ctx)
 
 @blueprint.route("/login", methods=['GET', 'POST'])
 def login():
@@ -122,10 +126,19 @@ def upload():
             try:
                 # Predict class
                 predicted_class = predict_class(tmp.name)
+                file_identifier = uuid7str()
                 if predicted_class.lower() in ['cat', 'dog']:
                     # If class is cat or dog, upload the file to S3
                     file.seek(0)
-                    s3_client.upload_file(file, filename_in_s3=secure_filename(file.filename), image_class=predicted_class.lower())
+                    current_app.logger.debug(file_identifier)
+                    s3_client.upload_file(file, filename_in_s3=file_identifier)
+
+                    userPicture = UserPicture(user_id=current_user.id, picture_identifier=file_identifier, picture_tag=predicted_class.lower())
+                    db.session.add(userPicture)
+                    db.session.commit()
+                    
+                    current_app.logger.debug(userPicture)
+
                     return render_template("public/home.html")
                 else:
                     # If class is not cat or dog, do not upload and return an error
@@ -142,8 +155,10 @@ def upload():
 def browse(animal):
     """Browse page."""
     current_app.logger.info("Hello from the browse page!")
-    list = s3_client.get_images_by_category(animal)
-    return render_template("public/browse.html", image_links=list, pet=animal)
+    user_pictures = db.session.query(UserPicture).filter(UserPicture.picture_tag == animal).order_by(UserPicture.id.desc()).limit(10).all()
+    picture_urls = [s3_client.get_s3_url(user_picture.picture_identifier) for user_picture in user_pictures] 
+
+    return render_template("public/browse.html", image_links=picture_urls, pet=animal)
 
 @blueprint.route("/about", methods=["GET"])
 def about():
