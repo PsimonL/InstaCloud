@@ -1,33 +1,42 @@
-{% extends "layout.html" %}
-{% block page_title %} Home {% endblock %}
-{% block main %}
+{% extends "layout.html" %} {% block page_title %} Home {% endblock %} {% block
+main %}
 <div id="carouselSlides" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img class="d-block w-90" src="{{static_url_for('static', filename='img/dog2.jpg') }}" alt="First slide">
-        </div>
-        <div class="carousel-item">
-            <img class="d-block w-90" src="{{static_url_for('static', filename='img/dog1.jpg') }}" alt="Second slide">
-        </div>
-        <div class="carousel-item">
-            <img class="d-block w-90" src="{{static_url_for('static', filename='img/cat2.jpg') }}" alt="Third slide">
-        </div>
-        <div class="carousel-item">
-            <img class="d-block w-90" src="{{static_url_for('static', filename='img/cat1.jpg') }}" alt="Fourth slide">
-        </div>
+  <div class="carousel-inner">
+    {% for s3_url in ctx.s3_urls %}
+    <div class="carousel-item active">
+      <img class="d-block w-90" src="{{ s3_url }}" alt="{{ s3_url }}" />
     </div>
+    {% endfor %}
+  </div>
 </div>
 
 <div class="text-center mt-4">
-    <div class="btn-group" role="group" aria-label="Button group">
-        <button type="button" class="btn btn-success dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-            aria-expanded="false">Show a wall of</button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <a class="dropdown-item" href="{{ url_for('public.browse', animal='cats') }}">Cats</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{{ url_for('public.browse', animal='dogs') }}">Dogs</a>
-        </div>
+  <div class="btn-group" role="group" aria-label="Button group">
+    <button
+      type="button"
+      class="btn btn-success dropdown-toggle"
+      id="dropdownMenuButton1"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      Show a wall of
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+      <a
+        class="dropdown-item"
+        href="{{ url_for('public.browse', animal='cat') }}"
+        >Cats</a
+      >
+      <div class="dropdown-divider"></div>
+      <a
+        class="dropdown-item"
+        href="{{ url_for('public.browse', animal='dog') }}"
+        >Dogs</a
+      >
     </div>
-    <a href="{{ url_for('public.upload') }}" class="btn btn-success" type="button">Upload a picture</a>
+  </div>
+  <a href="{{ url_for('public.upload') }}" class="btn btn-success" type="button"
+    >Upload a picture</a
+  >
 </div>
 {% endblock %}
