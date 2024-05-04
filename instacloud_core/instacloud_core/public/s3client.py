@@ -24,16 +24,6 @@ class S3_Client:
     def download_file(self, local_filename, filename_in_s3):
         self.client.download_file(Bucket=AWS_BUCKET_NAME, Key=filename_in_s3, Filename=local_filename)
     
-    # def get_images_by_category(self, category):
-    #     files = self.client.list_objects_v2(Bucket=AWS_BUCKET_NAME, Prefix=category + '/')
-    #     file_urls = []
-    #     if 'Contents' in files:
-    #         for file in files['Contents']:
-    #             params = {'Bucket': AWS_BUCKET_NAME, 'Key': file['Key']}
-    #             url = self.client.generate_presigned_url('get_object', Params=params, ExpiresIn=3600)
-    #             file_urls.append(url)
-    #     return file_urls
-    
     def get_s3_url(self, filename_in_s3):
         params = {'Bucket': AWS_BUCKET_NAME, 'Key': filename_in_s3}
         url = self.client.generate_presigned_url('get_object', Params=params, ExpiresIn=3600).replace("s3service", "localhost")

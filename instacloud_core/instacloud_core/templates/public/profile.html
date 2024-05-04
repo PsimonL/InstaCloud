@@ -1,0 +1,14 @@
+{% extends "layout.html" %} {% block page_title %} Profile {% endblock %} {%
+block main %}
+<div class="text-center mt-4">
+  <h1>Browsing profile of {{ user.username }}</h1>
+  {% for s3_url in s3_urls %}
+  <div>
+    <img
+      src="{{ s3_url }}"
+      style="width: 500px; height: 500px; object-fit: cover"
+    />
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

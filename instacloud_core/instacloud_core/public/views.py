@@ -69,9 +69,21 @@ def home():
     s3_urls = []
     for user_pic in all_user_pics:
         s3_urls.append(s3_client.get_s3_url(user_pic.picture_identifier))
-        
+
     ctx = {"s3_urls": s3_urls}
     return render_template("/public/home.html", ctx=ctx)
+
+@blueprint.route("/profile/<user_id>", methods=["GET"])
+def profile(user_id):
+    """Profile page."""
+    user_id = user_id if user_id is not None else current_user.id
+    
+    user = User.query.filter(User.id == user_id).first()
+
+    user_pics = UserPicture.query.filter(UserPicture.user_id == user_id).order_by(UserPicture.id.desc()).all()
+    s3_urls = [s3_client.get_s3_url(user_pic.picture_identifier) for user_pic in user_pics]
+        
+    return render_template("/public/profile.html", s3_urls=s3_urls, user=user)
 
 @blueprint.route("/login", methods=['GET', 'POST'])
 def login():
