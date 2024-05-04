@@ -21,6 +21,7 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from werkzeug.utils import secure_filename
 from uuid_extensions import uuid7str
+from .forms import RegistrationForm, LoginForm
 
 
 login_manager.login_view = "public.login"
@@ -29,37 +30,8 @@ login_manager.login_view = "public.login"
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-class RegistrationForm(FlaskForm):
-    username = StringField(
-                    validators=[InputRequired(), Length(min=4, max=20)], 
-                    render_kw={"placeholder": "Username"}
-                )
-    password = PasswordField(
-                    validators=[InputRequired(), Length(min=4, max=20)], 
-                    render_kw={"placeholder": "Password"}
-                )
-    submit = SubmitField("Register")
-
-    def validate_username(self, username):
-        existing_user_name = User.query.filter_by(
-            username=username.data).first()
-        if existing_user_name:
-            raise ValidationError("Username already exists!")
-
-class LoginForm(FlaskForm):
-    username = StringField(
-                    validators=[InputRequired(), Length(min=4, max=20)], 
-                    render_kw={"placeholder": "Username"}
-                )
-    password = PasswordField(
-                    validators=[InputRequired(), Length(min=4, max=20)], 
-                    render_kw={"placeholder": "Password"}
-                )
-    submit = SubmitField("Login")
-
 blueprint = Blueprint("public", __name__, static_folder="../static")
 s3_client = S3_Client()
-AWS_BUCKET_NAME = os.getenv('AWS_BUCKET_NAME')
 
 @blueprint.route("/", methods=["GET"])
 @login_required
@@ -77,7 +49,7 @@ def home():
 def profile(user_id):
     """Profile page."""
     user_id = user_id if user_id is not None else current_user.id
-    
+
     user = User.query.filter(User.id == user_id).first()
 
     user_pics = UserPicture.query.filter(UserPicture.user_id == user_id).order_by(UserPicture.id.desc()).all()
@@ -102,7 +74,6 @@ def logout():
     logout_user()
     return redirect(url_for("public.home"))
 
-
 @blueprint.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
@@ -120,8 +91,6 @@ def register():
 @login_required
 def upload():
     """Upload page."""
-    current_app.logger.info("Hello from the upload page!")
-
     if request.method == "GET":
         return render_template("public/upload.html")
     else:
@@ -142,15 +111,12 @@ def upload():
                 if predicted_class.lower() in ['cat', 'dog']:
                     # If class is cat or dog, upload the file to S3
                     file.seek(0)
-                    current_app.logger.debug(file_identifier)
                     s3_client.upload_file(file, filename_in_s3=file_identifier)
 
                     userPicture = UserPicture(user_id=current_user.id, picture_identifier=file_identifier, picture_tag=predicted_class.lower())
                     db.session.add(userPicture)
                     db.session.commit()
                     
-                    current_app.logger.debug(userPicture)
-
                     return render_template("public/home.html")
                 else:
                     # If class is not cat or dog, do not upload and return an error
