@@ -22,11 +22,11 @@ jobs:
       run: docker build --build-arg INSTALL_PYTHON_VERSION=3.11 --target builder -t insta_cloud:builder -f instacloud_core/Dockerfile instacloud_core/
 
     - name: Build Docker image as final Artifact
-      run: docker build --build-arg INSTALL_PYTHON_VERSION=3.11 --build-arg DATABASE_URL='${{ secrets.DATABASE_URL }}' --build-arg SECRET_KEY='${{ secrets.SECRET_KEY }}' --target production -t insta_cloud:production -f instacloud_core/Dockerfile instacloud_core/
+      run: docker build --build-arg INSTALL_PYTHON_VERSION=3.11 --target production -t insta_cloud:production -f instacloud_core/Dockerfile instacloud_core/
 
     - name: Start final container
       run: |
-        docker run --name insta_cloud_app -p 8080:5000 -d \
+        docker run --env DATABASE_URL='${{ secrets.DATABASE_URL }}' --env SECRET_KEY='${{ secrets.SECRET_KEY }}' --env AWS_ACCESS_KEY='${{ secrets.AWS_ACCESS_KEY }}' --env AWS_SECRET_KEY='${{ secrets.AWS_SECRET_KEY }}' --env AWS_BUCKET_NAME='${{ secrets.AWS_BUCKET_NAME }}' --env AWS_REGION='${{ secrets.AWS_REGION }}' --name insta_cloud_app -p 8080:5000 -d \
           --health-cmd="curl -f http://localhost:5000/ || exit 1" \
           --health-interval=10s \
           --health-timeout=10s \
