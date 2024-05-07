@@ -1,5 +1,45 @@
 {% extends "layout.html" %}
 {% block page_title %} About {% endblock %}
 {% block main %}
-This is the abouty page - in progress.
+<div class="container">
+    <div class="text-center mt-5">
+        <h1>Welcome to Instacloud!</h1>
+        <p>
+            Instacloud is your go-to platform for sharing adorable pet photos, whether they're of your playful pup or
+            your mischievous cat. With our intuitive interface, you'll find it effortless to navigate and enjoy all the
+            features we offer.
+        </p>
+
+        <p>
+            Once you've logged in, you'll be greeted with a delightful carousel of pet pictures from our extensive
+            database.
+        </p>
+
+        <p>
+            When you're ready to add your own pet's photo, simply click the "Upload a picture" button displayed on the
+            home page or by selecting the "Upload" option from the navigation bar. You'll then be directed to a page
+            where you can easily upload your image by clicking the "ADD IMAGE" button and selecting the file from your
+            file explorer, or by dragging and dropping the image onto the designated area (as shown in the screenshot
+            below):
+        </p>
+
+        <div class="mt-4">
+            <img src="{{ static_url_for('static', filename='img/upload.png') }}" alt="Upload Screenshot"
+                style="width: 900px; height: 300px;">
+        </div>
+
+        <p>
+            After selecting the "Show a wall of" button, which can be found on the home page, or pressing the "Show"
+            option from
+            the navigation bar, you'll be prompted to choose between cats or dogs. Once you've made your selection,
+            you'll be directed to a dedicated gallery page showcasing all the uploaded pictures of the chosen pet.
+        </p>
+
+        <p>
+            Additionally, if you'd like to revisit your own uploads, simply navigate to the "Profile" tab. There, you'll
+            find a collection of all the photos you've uploaded so far.
+        </p>
+
+    </div>
+</div>
 {% endblock %}
